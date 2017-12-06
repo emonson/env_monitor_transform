@@ -2,17 +2,15 @@ import importlib
 
 class TheTransformer(object):
     def __init__(self,
-                 dataframe,
+                 file_path,
                  file_type: str):
         self.module = self.dynamic_import(file_type)
-        self.dataframe = dataframe
+        self.file_path = file_path
 
     def main(self):
         # output dataframe must be created here
         try:
-            # NOTE: This might not be right... May need to store directory path in this
-            #   object and just send that to the Transform() method...
-            self.module.Transform(**self.dataframe)
+            self.module.Transform(**self.file_path)
         except ValueError as err:
             print('Error Message(s)', 'Incorrect Value Type: {}'.format(err))
         else:
