@@ -3,10 +3,10 @@ import glob
 import os
 import re
 
-data_dir = '.'
+in_directory = '.'
 out_name = 'hobo_clean.csv'
 
-files_list = glob.glob(os.path.join(data_dir,'*.csv'))
+files_list = glob.glob(os.path.join(in_directory,'*.csv'))
 # Exclude output files, assuming starting with 'hobo'
 files_list = [f for f in files_list if not os.path.basename(f).startswith('hobo')]
 

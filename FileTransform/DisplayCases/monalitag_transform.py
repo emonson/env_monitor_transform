@@ -1,6 +1,9 @@
 import pandas as pd
 
-df = pd.read_csv('2017-12-12_145508.csv', delimiter=';', encoding='iso-8859-1')
+in_file = '2017-12-12_145508.csv'
+out_file = '2017-12-12_145508_clean.csv'
+
+df = pd.read_csv(in_file, delimiter=';', encoding='iso-8859-1')
 
 # Don't need all the columns
 df = df.drop(['Acknowledged', 'Recording #', 'Priority', 'Previous value', \
@@ -24,4 +27,4 @@ df.Message = df.Message.str.replace("Temp, °C", "Temp, °F")
 df = df.rename(index=str, columns={'Location':'Room', 'Name':'Location', 'Message':'Measurement', 'Date':'DateTime'})
 
 # Save to file
-df[['Location','DateTime','Measurement','Value']].to_csv('2017-12-12_145508_clean.csv',index=False,encoding='utf-8')
+df[['Location','DateTime','Measurement','Value']].to_csv(out_file, index=False, encoding='utf-8')
