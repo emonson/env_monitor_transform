@@ -1,12 +1,19 @@
 import pandas as pd
+import datetime
 import glob
 import os
 import re
 
-in_directory = '.'
-out_name = 'hobo_clean.csv'
+# Edit this for desired data directory where all the individual Hobo files are located
+# that you want cleaned and concatenated. 
+# The output file will be hobo_clean_YYYY-MM-DD.csv
+data_dir = '/Users/emonson/Dropbox/People/WinstonAtkins/env_monitor_transform/notebook_solution/Data/Hobos'
 
-files_list = glob.glob(os.path.join(in_directory,'*.csv'))
+# Shouldn't have to edit below here...
+now = datetime.datetime.now()
+out_name = 'hobo_clean_' + now.strftime("%Y-%m-%d") + '.csv'
+
+files_list = glob.glob(os.path.join(data_dir,'*.csv'))
 # Exclude output files, assuming starting with 'hobo'
 files_list = [f for f in files_list if not os.path.basename(f).startswith('hobo')]
 

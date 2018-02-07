@@ -1,9 +1,16 @@
 import pandas as pd
+import os
 
+# Edit this for desired data directory and CSV file
+# The output file will have _clean added to the original filename
+data_dir = '/Users/emonson/Dropbox/People/WinstonAtkins/env_monitor_transform/notebook_solution/Data/DisplayCases'
 in_file = '2017-12-12_145508.csv'
-out_file = '2017-12-12_145508_clean.csv'
 
-df = pd.read_csv(in_file, delimiter=';', encoding='iso-8859-1')
+# Shouldn't have to edit below here...
+fp = os.path.splitext(in_file)
+out_file = fp[0] + '_clean' + fp[1]
+
+df = pd.read_csv(os.path.join(data_dir,in_file), delimiter=';', encoding='iso-8859-1')
 
 # Don't need all the columns
 df = df.drop(['Acknowledged', 'Recording #', 'Priority', 'Previous value', \
@@ -27,4 +34,4 @@ df.Message = df.Message.str.replace("Temp, °C", "Temp, °F")
 df = df.rename(index=str, columns={'Location':'Room', 'Name':'Location', 'Message':'Measurement', 'Date':'DateTime'})
 
 # Save to file
-df[['Location','DateTime','Measurement','Value']].to_csv(out_file, index=False, encoding='utf-8')
+df[['Location','DateTime','Measurement','Value']].to_csv(os.path.join(data_dir,out_file), index=False, encoding='utf-8')
