@@ -7,7 +7,7 @@ import re
 # Edit this for desired data directory where all the individual Hobo files are located
 # that you want cleaned and concatenated. 
 # The output file will be hobo_clean_YYYY-MM-DD.csv
-data_dir = '/Users/emonson/Dropbox/People/WinstonAtkins/env_monitor_transform/notebook_solution/Data/Hobos'
+data_dir = '/Users/emonson/Dropbox/People/WinstonAtkins/env_monitor_transform/PC_batch/Hobos'
 
 # Shouldn't have to edit below here...
 now = datetime.datetime.now()
@@ -19,8 +19,8 @@ files_list = [f for f in files_list if not os.path.basename(f).startswith('hobo'
 
 df = pd.DataFrame()
 
-for file in files_list:
-  print(file)
+for in_file in files_list:
+  print(in_file)
   location = 'default'
   
   # This will work for CSV files
@@ -50,7 +50,7 @@ for file in files_list:
   # CSV VERSION
   # "Date Time, GMT -0400","Temp, (*F)","RH, (%)","DewPt, (*F)","Host Connect","EOF"
   # Note: Not sure why it's not header=2, since there seem to be two lines before header...
-  df_tmp = pd.read_csv(file, sep=',', header=1, na_values=[' '])
+  df_tmp = pd.read_csv(os.path.join(data_dir,in_file), sep=',', header=1, na_values=[' '])
 
   # Find date time column, but name can change depending on daylight savings time
   datecol = [l.startswith('Date Time') for l in df_tmp.columns].index(True)
