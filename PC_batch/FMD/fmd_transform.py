@@ -12,18 +12,20 @@ data_dir = '/Users/emonson/Dropbox/People/WinstonAtkins/env_monitor_transform/PC
 now = datetime.datetime.now()
 out_file = 'fmd_clean_' + now.strftime("%Y-%m-%d") + '.csv'
 
+# Extensions tend to be in all caps for FMD data, but just in case, checking for both
 files_list = glob.glob(os.path.join(data_dir,'*.csv'))
 files_list.extend(glob.glob(os.path.join(data_dir,'*.CSV')))
 # Exclude output files, assuming starting with 'fmd'
 files_list = [f for f in files_list if not os.path.basename(f).startswith('fmd')]
+n_files = len(files_list)
 
 df = pd.DataFrame()
 
 # Table with human-readable location names – "Name:Suffix" to "Rubenstein Location"
 df_ref = pd.read_csv(os.path.join(data_dir,'RL_SensorsKey.txt'), sep=',', na_values=['NA'])
 
-for in_file in files_list:
-  print(in_file)
+for ii, in_file in enumerate(files_list):
+  print(ii+1, ' / ', n_files, ' : ', os.path.basename(in_file))
 
   first_table_end = 0
   main_table_start = 0

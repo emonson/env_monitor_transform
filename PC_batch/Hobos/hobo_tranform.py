@@ -14,15 +14,17 @@ data_dir = '/Users/emonson/Dropbox/People/WinstonAtkins/env_monitor_transform/PC
 now = datetime.datetime.now()
 out_name = 'hobo_clean_' + now.strftime("%Y-%m-%d") + '.csv'
 
+# Extensions tend to be in lowercase for Hobo data, but just in case, checking for both
 files_list = glob.glob(os.path.join(data_dir,'*.csv'))
 files_list.extend(glob.glob(os.path.join(data_dir,'*.CSV')))
 # Exclude output files, assuming starting with 'hobo'
 files_list = [f for f in files_list if not os.path.basename(f).startswith('hobo')]
+n_files = len(files_list)
 
 df = pd.DataFrame()
 
-for in_file in files_list:
-  print(in_file)
+for ii, in_file in enumerate(files_list):
+  print(ii+1, ' / ', n_files, ' : ', os.path.basename(in_file))
   location = 'default'
   
   # This will work for CSV files
@@ -37,7 +39,7 @@ for in_file in files_list:
 #   location = firstline.split(': ')[1]
   
   # NOTE: Should probably just pull the location name from the filename...!!
-  aa = re.match(r'(.+) \d\d\d\d-\d\d-\d\d \d\d_\d\d_\d\d -\d\d00\.csv', os.path.basename(file))
+  aa = re.match(r'(.+) \d\d\d\d-\d\d-\d\d \d\d_\d\d_\d\d -\d\d00\.csv', os.path.basename(in_file))
   if aa is not None:
     location = aa.groups()[0]
   

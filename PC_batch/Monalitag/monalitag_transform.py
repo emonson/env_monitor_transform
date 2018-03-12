@@ -12,15 +12,17 @@ data_dir = '/Users/emonson/Dropbox/People/WinstonAtkins/env_monitor_transform/PC
 now = datetime.datetime.now()
 out_file = 'monalitag_clean_' + now.strftime("%Y-%m-%d") + '.csv'
 
+# Extensions tend to be in lowercase for Monalitag data, but just in case, checking for both
 files_list = glob.glob(os.path.join(data_dir,'*.csv'))
 files_list.extend(glob.glob(os.path.join(data_dir,'*.CSV')))
 # Exclude output files, assuming starting with 'monalitag'
 files_list = [f for f in files_list if not os.path.basename(f).startswith('monalitag')]
+n_files = len(files_list)
 
 df = pd.DataFrame()
 
-for in_file in files_list:
-  print(in_file)
+for ii, in_file in enumerate(files_list):
+  print(ii+1, ' / ', n_files, ' : ', os.path.basename(in_file))
 
   df_tmp = pd.read_csv(os.path.join(data_dir,in_file), delimiter=';', encoding='iso-8859-1')
 
@@ -43,7 +45,9 @@ for in_file in files_list:
   df_tmp.Message = df_tmp.Message.str.replace("Temp, C", "Temp, F")
 
   # Rename columns
-  df_tmp = df_tmp.rename(index=str, columns={'Location':'Room', 'Name':'Location', 'Message':'Measurement', 'Date':'DateTime'})
+  # df_tmp = df_tmp.rename(index=str, columns={'Location':'Room', 'Name':'Location', 'Message':'Measurement', 'Date':'DateTime'})
+  df_tmp = df_tmp.rename(index=str, columns={'Location':'Room', 'Message':'Measurement', 'Date':'DateTime'})
+  df_tmp['Location'] = df_tmp.Room + ' : ' + df_tmp.Name
 
   df = pd.concat([df, df_tmp], axis=0)
 
