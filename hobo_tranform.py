@@ -3,6 +3,7 @@ import datetime
 import glob
 import os
 import re
+import datetime
 
 # Edit this for desired data directory where all the individual Hobo files are located
 # that you want cleaned and concatenated. 
@@ -14,6 +15,7 @@ now = datetime.datetime.now()
 out_name = 'hobo_clean_' + now.strftime("%Y-%m-%d") + '.csv'
 
 files_list = glob.glob(os.path.join(data_dir,'*.csv'))
+files_list.extend(glob.glob(os.path.join(data_dir,'*.CSV')))
 # Exclude output files, assuming starting with 'hobo'
 files_list = [f for f in files_list if not os.path.basename(f).startswith('hobo')]
 
@@ -54,10 +56,10 @@ for in_file in files_list:
 
   # Find date time column, but name can change depending on daylight savings time
   datecol = [l.startswith('Date Time') for l in df_tmp.columns].index(True)
-  df_tmp = df_tmp.rename(columns={df_tmp.columns[datecol]:"DateTime", "Temp, (*F)":"Temp, °F", "RH, (%)":"RH, %"})
+  df_tmp = df_tmp.rename(columns={df_tmp.columns[datecol]:"DateTime", "Temp, (*F)":"Temp, F", "RH, (%)":"RH, %"})
 
   # For now drop dewpoint since it can be calculated from the other two, plus others...
-  df_tmp = df_tmp[["DateTime", "Temp, °F", "RH, %"]]
+  df_tmp = df_tmp[["DateTime", "Temp, F", "RH, %"]]
     
   # Pivot measurements from columns into rows
   df_tmp = pd.melt(df_tmp, id_vars=["DateTime"], var_name="Measurement", value_name="Value")

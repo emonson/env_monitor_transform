@@ -1,5 +1,7 @@
 import pandas as pd
 import os
+import datetime
+import glob
 
 # Edit this for desired data directory where all the individual Hobo files are located
 # that you want cleaned and concatenated. 
@@ -11,6 +13,7 @@ now = datetime.datetime.now()
 out_file = 'fmd_clean_' + now.strftime("%Y-%m-%d") + '.csv'
 
 files_list = glob.glob(os.path.join(data_dir,'*.csv'))
+files_list.extend(glob.glob(os.path.join(data_dir,'*.CSV')))
 # Exclude output files, assuming starting with 'fmd'
 files_list = [f for f in files_list if not os.path.basename(f).startswith('fmd')]
 

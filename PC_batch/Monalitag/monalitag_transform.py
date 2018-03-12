@@ -1,5 +1,7 @@
 import pandas as pd
 import os
+import datetime
+import glob
 
 # Edit this for desired data directory where all the individual Hobo files are located
 # that you want cleaned and concatenated. 
@@ -11,6 +13,7 @@ now = datetime.datetime.now()
 out_file = 'monalitag_clean_' + now.strftime("%Y-%m-%d") + '.csv'
 
 files_list = glob.glob(os.path.join(data_dir,'*.csv'))
+files_list.extend(glob.glob(os.path.join(data_dir,'*.CSV')))
 # Exclude output files, assuming starting with 'monalitag'
 files_list = [f for f in files_list if not os.path.basename(f).startswith('monalitag')]
 
@@ -29,15 +32,15 @@ for in_file in files_list:
   # could also do a string split and get(2) element
   df_tmp.Location = df_tmp.Location.str.extract('.+>.+>(.+)', expand=False)
 
-  df_tmp.Message = df_tmp.Message.str.replace("Température \(°\)", "Temp, °C")
-  df_tmp.Message = df_tmp.Message.str.replace("Temperature \(°F\)", "Temp, °F")
+  df_tmp.Message = df_tmp.Message.str.replace("Température \(°\)", "Temp, C")
+  df_tmp.Message = df_tmp.Message.str.replace("Temperature \(°F\)", "Temp, F")
   df_tmp.Message = df_tmp.Message.str.replace("Hygrométrie \(%\)", "RH, %")
   df_tmp.Message = df_tmp.Message.str.replace("Hygrometry ratio", "RH, %")
 
   # Any temps in C convert to F and change label
   # T(°F) = T(°C) × 1.8 + 32
-  df_tmp.loc[df_tmp.Message.str.match('Temp, °C'),'Value'] = df_tmp.loc[df_tmp.Message.str.match('Temp, °C'),'Value']*1.8 + 32
-  df_tmp.Message = df_tmp.Message.str.replace("Temp, °C", "Temp, °F")
+  df_tmp.loc[df_tmp.Message.str.match('Temp, C'),'Value'] = df_tmp.loc[df_tmp.Message.str.match('Temp, C'),'Value']*1.8 + 32
+  df_tmp.Message = df_tmp.Message.str.replace("Temp, C", "Temp, F")
 
   # Rename columns
   df_tmp = df_tmp.rename(index=str, columns={'Location':'Room', 'Name':'Location', 'Message':'Measurement', 'Date':'DateTime'})
