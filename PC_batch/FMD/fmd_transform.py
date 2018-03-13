@@ -13,8 +13,7 @@ now = datetime.datetime.now()
 out_file = 'fmd_clean_' + now.strftime("%Y-%m-%d") + '.csv'
 
 # Extensions tend to be in all caps for FMD data, but just in case, checking for both
-files_list = glob.glob(os.path.join(data_dir,'*.csv'))
-files_list.extend(glob.glob(os.path.join(data_dir,'*.CSV')))
+files_list = glob.glob(os.path.join(data_dir,'*.[Cc][Ss][Vv]'))
 # Exclude output files, assuming starting with 'fmd'
 files_list = [f for f in files_list if not os.path.basename(f).startswith('fmd')]
 n_files = len(files_list)
