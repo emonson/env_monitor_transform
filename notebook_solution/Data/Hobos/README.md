@@ -1,1 +1,0 @@
-### Remote Hobo monitors data
