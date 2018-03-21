@@ -11,7 +11,10 @@ If you've never used Git before, and don't have it installed on your machine, th
 will be to just go to the green "Clone or download" button on this page, click it, and choose "Download ZIP"
 on the lower right. Unzip that package into the place you'll want to run the routines. 
 
-Before you can actuall run them, though, you need to have Python installed.
+Before you can actuall run them, though, *you need to have Python installed*, and *you'll 
+need to modify one line of text in the .bat file and one line in the .py file* 
+to customize the scripts to the specific python executable and script/data directory locations
+on your machine. 
 
 ### Python: Miniconda
 
@@ -26,10 +29,10 @@ high-performance structured data maniuplation module.
 Start by [downloading the appropriate Miniconda installer](https://conda.io/miniconda.html) for Python 3
 (as opposed to Python 2). This will most likely be a 64-bit version, as most operating systems now are 64-bit.
 You can choose to install Miniconda for just you, or for any users on your system. If you just install it
-for you, you won't even need admin privileges. 
+for you -- and I would recommend that -- you won't even need admin privileges. 
 
 After that, all you should need for these scripts that isn't included with Python itself is Pandas.
-So, in the Anaconda Prompt (somewhere under yor start menu on Windows), type:
+So, in the Anaconda Prompt (somewhere under your start menu on Windows), type:
 
 ```
 conda install pandas

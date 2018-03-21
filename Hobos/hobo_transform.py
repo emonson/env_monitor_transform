@@ -8,7 +8,7 @@ import datetime
 # Edit this for desired data directory where all the individual Hobo files are located
 # that you want cleaned and concatenated. 
 # The output file will be hobo_clean_YYYY-MM-DD.csv
-data_dir = '/Users/emonson/Dropbox/People/WinstonAtkins/env_monitor_transform/PC_batch/Hobos'
+data_dir = r'C:\Users\emonson\Downloads\env_monitor_transform-master\Hobos'
 
 # Shouldn't have to edit below here...
 now = datetime.datetime.now()
