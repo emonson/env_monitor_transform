@@ -1,12 +1,18 @@
 from sqlalchemy import create_engine, exc
 from sqlalchemy.sql import text
 import pandas as pd
+from numpy import float32, float64
 import sys
 
 engine = create_engine('mysql://tableau:tableau.log@rapid-902.vm.duke.edu:3306/environment')
 
-df = pd.read_csv('../FMD/fmd_clean_2018-03-13.csv',encoding='utf-8')
+# Keep DateTime as string upon read so don't have the conversion time.
+# MySQL takes the string and interprets as datetime just fine.
+df = pd.read_csv('../FMD/fmd_clean_2018-05-16.csv',encoding='utf-8',dtype={"Location":"str", "DateTime":"str", "Measurement":"str", "Value":float32})
+# df = pd.read_csv('../Monalitag/monalitag_clean_2018-03-13.csv',encoding='utf-8')
+print("data loaded")
 df = df.drop_duplicates()
+print("deduplicated")
 
 # Creating a table not using nice ORM methods for now...
 statement = """DROP TABLE IF EXISTS `measure_temp`;
@@ -34,7 +40,9 @@ with engine.connect() as con:
     print("Row count: ", len(params))
   except:
     print("Unexpected error:", sys.exc_info()[0])
-
+  else:
+    print("Successfully created temporary table")
+    
   try: 
     df.to_sql('measure_temp', engine, if_exists='append', index=False)
   except exc.IntegrityError as err:

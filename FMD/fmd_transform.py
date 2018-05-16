@@ -6,7 +6,8 @@ import glob
 # Edit this for desired data directory where all the individual Hobo files are located
 # that you want cleaned and concatenated. 
 # The output file will be fmd_clean_YYYY-MM-DD.csv
-data_dir = r'C:\Users\emonson\Downloads\env_monitor_transform-master\FMD'
+# data_dir = r'C:\Users\emonson\Downloads\env_monitor_transform-master\FMD'
+data_dir = r'/Users/emonson/Dropbox/People/WinstonAtkins/env_monitor_transform/FMD'
 
 # Shouldn't have to edit below here...
 now = datetime.datetime.now()
@@ -71,8 +72,15 @@ for ii, in_file in enumerate(files_list):
 
   df = pd.concat([df, df_tmp], axis=0)
 
+# There are some bad data string value in the original spreadsheet.
+# to_numeric(errors='coerce') will force them to NaNs
+df.Value = pd.to_numeric(df.Value, errors='coerce')
+
 # Duplicate measurements often downloaded
-df = df.drop_duplicates()
+# NOTE: This will only keep the first instance, so if there are problem duplicates
+#   with non-equal measurement values, this will ignore them, whereas df.drop_duplicates()
+#   will only drop if really duplicated across all colunns!!
+df = df.drop_duplicates(['Location','DateTime','Measurement'])
 
 # Save to file
 df[['Location','DateTime','Measurement','Value']].to_csv(os.path.join(data_dir,out_file), index=False, encoding='utf-8')
