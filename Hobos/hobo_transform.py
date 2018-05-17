@@ -4,11 +4,16 @@ import glob
 import os
 import re
 import datetime
+import json
 
 # Edit this for desired data directory where all the individual Hobo files are located
 # that you want cleaned and concatenated. 
 # The output file will be hobo_clean_YYYY-MM-DD.csv
-data_dir = r'C:\Users\emonson\Downloads\env_monitor_transform-master\Hobos'
+
+# config.json file in root directory of the repository should contain the path
+# to that directory
+opts = json.loads(open("../config.json").read())
+data_dir = os.path.join(opts['repo_dir'],'Hobos')
 
 # Shouldn't have to edit below here...
 now = datetime.datetime.now()
@@ -57,25 +62,33 @@ for ii, in_file in enumerate(files_list):
 
   # Find date time column, but name can change depending on daylight savings time
   datecol = [l.startswith('Date Time') for l in df_tmp.columns].index(True)
-  df_tmp = df_tmp.rename(columns={df_tmp.columns[datecol]:"DateTime", "Temp, (*F)":"Temp, F", "RH, (%)":"RH, %"})
+  df_tmp = df_tmp.rename(columns={df_tmp.columns[datecol]:"datetime", "Temp, (*F)":"Temp F", "RH, (%)":"RH %"})
 
-  # For now drop dewpoint since it can be calculated from the other two, plus others...
-  df_tmp = df_tmp[["DateTime", "Temp, F", "RH, %"]]
+  # For now drop dewpoint since it can be calculated from the other two...
+  df_tmp = df_tmp[["datetime", "Temp F", "RH %"]]
     
   # Pivot measurements from columns into rows
-  df_tmp = pd.melt(df_tmp, id_vars=["DateTime"], var_name="Measurement", value_name="Value")
+  df_tmp = pd.melt(df_tmp, id_vars=["datetime"], var_name="measurement", value_name="value")
   
-  # Tableau had some trouble with Union when some Nulls existed in the Value column...
-  df_tmp = df_tmp.dropna(axis=0, subset=['Value'])
+  # Tableau had some trouble with Union when some Nulls existed in the value column...
+  df_tmp = df_tmp.dropna(axis=0, subset=['value'])
   
-  df_tmp['Location'] = location
+  # RL Stacks rooms have a comma in the filename, but our locations DB doesn't
+  df_tmp['location'] = location.replace(',','')
   
   df = pd.concat([df, df_tmp], axis=0)
 
+# In case there are some bad data string values in the original spreadsheet.
+# to_numeric(errors='coerce') will force them to NaNs
+df.value = pd.to_numeric(df.value, errors='coerce')
+
 # Duplicate measurements often downloaded
-df = df.drop_duplicates()
+# NOTE: This will only keep the first instance, so if there are problem duplicates
+#   with non-equal measurement values, this will ignore them, whereas df.drop_duplicates()
+#   will only drop if really duplicated across all colunns!!
+df = df.drop_duplicates(['location','datetime','measurement'])
 
 # Save to file
-df[['Location','DateTime','Measurement','Value']].to_csv(out_name, index=False, encoding='utf-8')
+df[['location','datetime','measurement','value']].to_csv(out_name, index=False, encoding='utf-8')
 
   

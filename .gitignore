@@ -5,3 +5,6 @@ __pycache__
 *.csv
 *.CSV
 
+# The server config file that's actually used in the apps
+config.json
+

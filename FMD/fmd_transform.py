@@ -2,12 +2,16 @@ import pandas as pd
 import os
 import datetime
 import glob
+import json
 
 # Edit this for desired data directory where all the individual Hobo files are located
 # that you want cleaned and concatenated. 
 # The output file will be fmd_clean_YYYY-MM-DD.csv
-# data_dir = r'C:\Users\emonson\Downloads\env_monitor_transform-master\FMD'
-data_dir = r'/Users/emonson/Dropbox/People/WinstonAtkins/env_monitor_transform/FMD'
+
+# config.json file in root directory of the repository should contain the path
+# to that directory
+opts = json.loads(open("../config.json").read())
+data_dir = os.path.join(opts['repo_dir'],'FMD')
 
 # Shouldn't have to edit below here...
 now = datetime.datetime.now()
@@ -55,32 +59,32 @@ for ii, in_file in enumerate(files_list):
   df_tmp = df_tmp[~df_tmp.Date.str.contains('\*\*\*')]
 
   # Pivot real data before translating column names into locations so can use a JOIN
-  df_tmp = pd.melt(df_tmp, id_vars=["Date","Time"], var_name="Key", value_name="Value")
+  df_tmp = pd.melt(df_tmp, id_vars=["Date","Time"], var_name="Key", value_name="value")
 
-  # Tableau had some trouble with Union when some Nulls existed in the Value column...
-  df_tmp = df_tmp.dropna(axis=0, subset=['Value'])
+  # Tableau had some trouble with Union when some Nulls existed in the value column...
+  df_tmp = df_tmp.dropna(axis=0, subset=['value'])
 
   # Turn Point_* names into location obscure names
   df_tmp = pd.merge(df_tmp, df_loc, left_on='Key', right_on='Key')
-  df_tmp = df_tmp[['Date','Time','Value','Name:Suffix']]
+  df_tmp = df_tmp[['Date','Time','value','Name:Suffix']]
 
   # Now join with human-readable location names and measurements
   df_tmp = pd.merge(df_tmp, df_ref, left_on='Name:Suffix', right_on='Name:Suffix')
 
   # Combine separate date and time columns into proper datetime object
-  df_tmp['DateTime'] = pd.to_datetime(df_tmp.Date + " " + df_tmp.Time, format='%m/%d/%Y %H:%M:%S')
+  df_tmp['datetime'] = pd.to_datetime(df_tmp.Date + " " + df_tmp.Time, format='%m/%d/%Y %H:%M:%S')
 
   df = pd.concat([df, df_tmp], axis=0)
 
-# There are some bad data string value in the original spreadsheet.
+# There are often some bad data string values in the original spreadsheet.
 # to_numeric(errors='coerce') will force them to NaNs
-df.Value = pd.to_numeric(df.Value, errors='coerce')
+df.value = pd.to_numeric(df.value, errors='coerce')
 
 # Duplicate measurements often downloaded
 # NOTE: This will only keep the first instance, so if there are problem duplicates
 #   with non-equal measurement values, this will ignore them, whereas df.drop_duplicates()
 #   will only drop if really duplicated across all colunns!!
-df = df.drop_duplicates(['Location','DateTime','Measurement'])
+df = df.drop_duplicates(['location','datetime','measurement'])
 
 # Save to file
-df[['Location','DateTime','Measurement','Value']].to_csv(os.path.join(data_dir,out_file), index=False, encoding='utf-8')
+df[['location','datetime','measurement','value']].to_csv(os.path.join(data_dir,out_file), index=False, encoding='utf-8')
