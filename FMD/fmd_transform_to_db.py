@@ -89,6 +89,9 @@ for ii, in_file in enumerate(files_list):
 
   df = pd.concat([df, df_tmp], axis=0)
 
+# Don't need any other columns (which may screw up later manipulations, anyway)
+df = df[['location','datetime','measurement','value']]
+
 # There are often some bad data string values in the original spreadsheet.
 # to_numeric(errors='coerce') will force them to NaNs
 df.value = pd.to_numeric(df.value, errors='coerce')
@@ -99,5 +102,22 @@ df.value = pd.to_numeric(df.value, errors='coerce')
 #   will only drop if really duplicated across all colunns!!
 df = df.drop_duplicates(['location','datetime','measurement'])
 
+
+# Import dew point formula function
+spec = importlib.util.spec_from_file_location("name", os.path.join(opts['repo_dir'],'Tdf/Tdf.py'))
+dewpoint = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(dewpoint)
+
+# Need to pivot so Temp and RH are in their own columns
+# .reset_index() puts hierarchical index from pivot table back as real columns
+df_pivot = pd.pivot_table(df, values='value', index=['location','datetime'], columns=['measurement']).reset_index()
+
+# Calculate dew point from Temp and RH (vectorized with numpy arrays)
+df_pivot['DewPt F'] = dewpoint.tdf_np(df_pivot['Temp F'].values, df_pivot['RH %'].values)
+
+# Melt back into tidy data, dropping NAs
+df_wdp = pd.melt(df_pivot, id_vars=['location','datetime'], var_name='measurement', value_name='value')
+df_wdp = df_wdp.dropna(axis=0, subset=['value'])
+
 # Save to MySQL DB
-db.env_df_to_mysql(df[['location','datetime','measurement','value']], opts)
+db.env_df_to_mysql(df_wdp, opts)
