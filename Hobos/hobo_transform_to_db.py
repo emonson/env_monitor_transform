@@ -13,7 +13,7 @@ import json
 # config.json file in root directory of the repository should contain the path
 # to that directory
 opts = json.loads(open("../config.json").read())
-data_dir = os.path.join(opts['repo_dir'],'Hobos')
+data_dir = os.path.join(opts['repo_dir'],'Hobos','data')
 
 # Load function for exporting data from DataFrame to MySQL DB
 #   (Not sure what the "name" part is for in spec_from_file_location()... putting "name" for now...)
@@ -36,7 +36,7 @@ files_list = glob.glob(os.path.join(data_dir,'*.[Cc][Ss][Vv]'))
 files_list = [f for f in files_list if not os.path.basename(f).startswith('hobo')]
 n_files = len(files_list)
 
-df = pd.DataFrame()
+df_list = []
 
 for ii, in_file in enumerate(files_list):
   print(ii+1, ' / ', n_files, ' : ', os.path.basename(in_file))
@@ -87,7 +87,10 @@ for ii, in_file in enumerate(files_list):
   # RL Stacks rooms have a comma in the filename, but our locations DB doesn't
   df_tmp['location'] = location.replace(',','')
   
-  df = pd.concat([df, df_tmp], axis=0)
+  df_list.append(df_tmp)
+
+# Put all of the individuals together
+df = pd.concat(df_list, axis=0)
 
 # Don't need any other columns (which may screw up later manipulations, anyway)
 df = df[['location','datetime','measurement','value']]
@@ -120,5 +123,6 @@ df_wdp = pd.melt(df_pivot, id_vars=['location','datetime'], var_name='measuremen
 df_wdp = df_wdp.dropna(axis=0, subset=['value'])
 
 # Save to MySQL DB
-db.env_df_to_mysql(df_wdp, opts)
+# db.env_df_to_mysql(df_wdp, opts)
+print(df_wdp)
   

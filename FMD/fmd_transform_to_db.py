@@ -13,7 +13,8 @@ import json
 # NOTE: This relative path may not be safe if the script is run from a different directory
 #  but should be fine if initiated by .bat file in this directory...
 opts = json.loads(open("../config.json").read())
-data_dir = os.path.join(opts['repo_dir'],'FMD')
+script_dir = os.path.join(opts['repo_dir'],'FMD')
+data_dir = os.path.join(opts['repo_dir'],'FMD','data')
 
 # Load function for exporting data from DataFrame to MySQL DB
 #   (Not sure what the "name" part is for in spec_from_file_location()... putting "name" for now...)
@@ -36,10 +37,10 @@ files_list = glob.glob(os.path.join(data_dir,'*.[Cc][Ss][Vv]'))
 files_list = [f for f in files_list if not os.path.basename(f).startswith('fmd')]
 n_files = len(files_list)
 
-df = pd.DataFrame()
+df_list = []
 
 # Table with human-readable location names – "Name:Suffix" to "Rubenstein Location"
-df_ref = pd.read_csv(os.path.join(data_dir,'RL_SensorsKey.txt'), sep=',', na_values=['NA'])
+df_ref = pd.read_csv(os.path.join(script_dir,'RL_SensorsKey_rev.csv'), sep=',', na_values=['NA'])
 
 for ii, in_file in enumerate(files_list):
   print(ii+1, ' / ', n_files, ' : ', os.path.basename(in_file))
@@ -58,7 +59,12 @@ for ii, in_file in enumerate(files_list):
 
   # Location lookup table doesn't have any well-formatted headers, and row numbers are 0-based
   df_loc = pd.read_csv(os.path.join(data_dir,in_file), sep=',', header=None, skiprows=1, nrows=first_table_end-1)
-  df_loc.columns = ['Key','Name:Suffix','Junk','TimeIncrement']
+  # PBR records have four columns, and LSC has five for some reason
+  if len(df_loc.columns) == 5:
+    df_loc.columns = ['Key','Name:Suffix','Junk','UnitDescription','TimeIncrement']
+  else:
+    df_loc.columns = ['Key','Name:Suffix','Junk','TimeIncrement']
+
   # Column headers won't have a colon at the end, so I prefer to remove them here
   df_loc.Key = df_loc.Key.str.replace(':','')
 
@@ -87,7 +93,10 @@ for ii, in_file in enumerate(files_list):
   # Combine separate date and time columns into proper datetime object
   df_tmp['datetime'] = pd.to_datetime(df_tmp.Date + " " + df_tmp.Time, format='%m/%d/%Y %H:%M:%S')
 
-  df = pd.concat([df, df_tmp], axis=0)
+  df_list.append(df_tmp)
+
+# Put all of the individuals together
+df = pd.concat(df_list, axis=0)
 
 # Don't need any other columns (which may screw up later manipulations, anyway)
 df = df[['location','datetime','measurement','value']]
@@ -120,4 +129,5 @@ df_wdp = pd.melt(df_pivot, id_vars=['location','datetime'], var_name='measuremen
 df_wdp = df_wdp.dropna(axis=0, subset=['value'])
 
 # Save to MySQL DB
-db.env_df_to_mysql(df_wdp, opts)
+# db.env_df_to_mysql(df_wdp, opts)
+print(df_wdp)
