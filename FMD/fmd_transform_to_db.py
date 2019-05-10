@@ -40,7 +40,7 @@ n_files = len(files_list)
 df_list = []
 
 # Table with human-readable location names – "Name:Suffix" to "Rubenstein Location"
-df_ref = pd.read_csv(os.path.join(script_dir,'RL_SensorsKey_rev.csv'), sep=',', na_values=['NA'])
+df_ref = pd.read_csv(os.path.join(script_dir,'FMD_SensorsKey_rev.csv'), sep=',', na_values=['NA'])
 
 for ii, in_file in enumerate(files_list):
   print(ii+1, ' / ', n_files, ' : ', os.path.basename(in_file))
