@@ -128,5 +128,5 @@ df_wdp = pd.melt(df_pivot, id_vars=['location','datetime'], var_name='measuremen
 df_wdp = df_wdp.dropna(axis=0, subset=['value'])
 
 # Save to MySQL DB
-# db.env_df_to_mysql(df_wdp, opts)
-print(df_wdp.groupby(["location","measurement"]).size().reset_index(name='count'))
+db.env_df_to_mysql(df_wdp, opts)
+# print(df_wdp.groupby(["location","measurement"]).size().reset_index(name='count'))
