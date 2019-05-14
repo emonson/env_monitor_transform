@@ -26,10 +26,9 @@ spec = importlib.util.spec_from_file_location("name", os.path.join(opts['repo_di
 db = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(db)
 
-
+#
 # Shouldn't have to edit below here...
-now = datetime.datetime.now()
-out_file = 'fmd_clean_' + now.strftime("%Y-%m-%d") + '.csv'
+#
 
 # Extensions tend to be in all caps for FMD data, but just in case, checking for both
 files_list = glob.glob(os.path.join(data_dir,'*.[Cc][Ss][Vv]'))
@@ -130,4 +129,4 @@ df_wdp = df_wdp.dropna(axis=0, subset=['value'])
 
 # Save to MySQL DB
 # db.env_df_to_mysql(df_wdp, opts)
-print(df_wdp)
+print(df_wdp.groupby(["location","measurement"]).size().reset_index(name='count'))

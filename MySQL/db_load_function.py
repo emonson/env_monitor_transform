@@ -13,7 +13,7 @@ def execute_sql(con:Connection, statement: str):
       rs = con.execute(statement)
       if statement.startswith("INSERT"):
         print(rs.rowcount, " Rows inserted")
-    except (exc.OperationalError, exc.ProgrammingError) as err:
+    except (exc.OperationalError, exc.ProgrammingError, exc.IntegrityError) as err:
       print("Error:")
       # Tuple containing all rows (as tuples) in the error
       params = err.params
@@ -32,21 +32,24 @@ def env_df_to_mysql(df:pd.DataFrame, opts:dict):
   port = opts["mysql_port"]
   user = opts["mysql_username"]
   pswd = opts["mysql_password"]
+  
+  temp_table = "measure_temp"
+  final_table = "measurements"
 
   engine = create_engine("mysql://"+user+":"+pswd+"@"+url+":"+port+"/environment")
 
   with engine.connect() as con:
 
-    # TODO: Should put in a CREATE TABLE if measurements doesn't exist
+    # TODO: Should put in a CREATE TABLE if {final_table} doesn't exist
     
     # Dropping old temp table if exists
-    statement = """DROP TABLE IF EXISTS `measure_temp`;"""
+    statement = f"""DROP TABLE IF EXISTS `{temp_table}`;"""
     execute_sql(con, statement)
     print("Successfully dropped old temporary table")
 
     # Creating a table not using nice ORM methods for now...
     # Create new temporary table
-    statement = """CREATE TABLE `measure_temp` (
+    statement = f"""CREATE TABLE `{temp_table}` (
       `location` varchar(255) NOT NULL,
       `datetime` datetime NOT NULL,
       `measurement` varchar(20) NOT NULL,
@@ -59,7 +62,7 @@ def env_df_to_mysql(df:pd.DataFrame, opts:dict):
     # Transfer data to temporary table
     try: 
       print("Transferring data to temporary table...")
-      df.to_sql('measure_temp', engine, if_exists='append', index=False)
+      df.to_sql(f'{temp_table}', engine, if_exists='append', index=False)
     except (exc.IntegrityError, exc.DataError) as err:
       print("Error:")
       # Tuple containing all rows (as tuples) in the error
@@ -76,14 +79,14 @@ def env_df_to_mysql(df:pd.DataFrame, opts:dict):
     else:
       print("Successfully loaded ", len(df), " rows to DB")
   
-    # Transfer data from temp table to real measurements
-    # but only new measurements that weren't already there
-    print("Transferring new data into measurements table...")
-    statement = """INSERT INTO measurements
+    # Transfer data from {temp_table} to real {final_table}
+    # but only new {final_table} that weren't already there
+    print(f"Transferring new data into {final_table} table...")
+    statement = f"""INSERT INTO {final_table}
       SELECT s.location, s.datetime, s.measurement, s.value
-      FROM measure_temp s 
-         LEFT JOIN measurements d ON (d.location = s.location AND d.datetime = s.datetime AND d.measurement = s.measurement)
+      FROM {temp_table} s 
+         LEFT JOIN {final_table} d ON (d.location = s.location AND d.datetime = s.datetime AND d.measurement = s.measurement)
       WHERE d.location IS NULL;"""
     execute_sql(con, statement)
-    print("Successfully transferred new data to measurements table")
+    print(f"Successfully transferred new data to {final_table} table")
 
