@@ -20,6 +20,10 @@ Biddle Room : DC 07 Left,DisplayCases
 Biddle Room : DC 07 Right,DisplayCases
 Biddle Room : DC 20 Left,DisplayCases
 Biddle Room : DC 20 Right,DisplayCases
+Bostock 2d Floor,Bostock
+Bostock 3d Floor,Bostock
+Bostock 4th Floor,Bostock
+Bostock Lower Level,Bostock
 Center table,Exhibits Areas
 Cold Storage Left,RL Research Svcs
 Cold Storage Right,RL Research Svcs
@@ -39,7 +43,26 @@ LSC Module 1 Return,LSC
 LSC Module 2 Return,LSC
 LSC Module 3 Return,LSC
 LSC Outdoor,LSC
+Perkins 1st Floor zone 1,Perkins
+Perkins 1st Floor zone 2,Perkins
+Perkins 1st Floor zone 3,Perkins
+Perkins 1st Floor zone 4,Perkins
+Perkins 2d Floor zone 2,Perkins
+Perkins 2d Floor zone 3,Perkins
+Perkins 2d Floor zone 4,Perkins
+Perkins 3d Floor zone 1,Perkins
+Perkins 3d Floor zone 2,Perkins
+Perkins 3d Floor zone 3,Perkins
+Perkins 3d Floor zone 4,Perkins
+Perkins 4th Floor zone 1,Perkins
+Perkins 4th Floor zone 2,Perkins
+Perkins 4th Floor zone 3,Perkins
+Perkins 4th Floor zone 4,Perkins
 Perkins Lobby,Exhibits Areas
+Perkins Lower Level 2 zone 1,Perkins
+Perkins Lower Level 2 zone 2,Perkins
+Perkins Lower Level 2 zone 3,Perkins
+Perkins Lower Level 2 zone 4,Perkins
 PhotoGallery1,Exhibits Areas
 PhotoGallery2,Exhibits Areas
 Reading Room,RL Research Svcs
@@ -65,30 +88,3 @@ Trent Room : DC 11 Left,DisplayCases
 Trent Room : DC 11 Right,DisplayCases
 Trent Room : DC 22 Left,DisplayCases
 Trent Room : DC 22 Right,DisplayCases
-W04Q2310,Unknown
-W04Q2311,Unknown
-W04Q2315,Unknown
-W04Q2318,Unknown
-W04T1037D1A,Unknown
-W04T1227A1A,Unknown
-W04T1332B1A,Unknown
-W04T1422C1A,Unknown
-W04T21012B2C,Unknown
-W04T2101A2C,Unknown
-W04T2101A3C,Unknown
-W04T2101C3C,Unknown
-W04T2225BL,Unknown
-W04T2233HL,Unknown
-W04T2238BL,Unknown
-W04T2310BL,Unknown
-W04T2310HL,Unknown
-W04T2311BL,Unknown
-W04T2315AL,Unknown
-W04T2409BL,Unknown
-W04T2409JL,Unknown
-W04T2415BL,Unknown
-W04T2420L,Unknown
-W04T2B14A1A,Unknown
-W04T2B14A2A,Unknown
-W04T2B14A6C,Unknown
-W04T2B14C3A,Unknown
