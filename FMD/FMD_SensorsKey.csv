@@ -1,0 +1,66 @@
+﻿Name:Suffix,location,measurement,AirHandlerUnit
+W04T095BA:CTL TEMP,095 Exhibit Prep,Temp F,6&7
+7704.4095B.RMH,095 Exhibit Prep,RH %,6&7
+W04T171A:CTL TEMP,171 Reserves Shelving,Temp F,6&7
+7704.4171.RMH,171 Reserves Shelving,RH %,6&7
+7704.R4099.RMT,099 Lower Level Stacks,Temp F,17
+7704.AHU17.RAH,099 Lower Level Stacks,RH %,17
+7704.R4299.RMT,299 Second Floor Stacks,Temp F,9
+7704.R4399.RMT,399 Third Floor Stacks,Temp F,9
+7704.AHU09.RAH,2d and 3d Floor,RH %,9
+7704.RHC05.RMT,2-021A Conservation DPC Vault,Temp F,11
+7705.2021A.RMH,2-021A Conservation DPC Vault,RH %,11
+W04T2023BC:ROOM TEMP,Conservation Lab Benches,Temp F,12
+W04T2023CC:ROOM TEMP,Conservation Lab Wet Area,Temp F,12
+W04T2013C:ROOM TEMP,DPC Staff Area,Temp F,12
+W04T2017AC:ROOM TEMP,DPC Camera Room,Temp F,12
+W04T2017BC:ROOM TEMP,DPC Zeutschel Scanner,Temp F,12
+7704.AHU12.RMH,Conservation Lab,RH %,12
+7704.R4140A.RTE,140A Biddle Exhibit Entrance,Temp F,16
+7704.R4140A.RHE,140A Biddle Exhibit Entrance,RH %,16
+7704.R4140A.RTF,140A Biddle Exhibit Fireplace,Temp F,16
+7704.R4140A.RHF,140A Biddle Exhibit Fireplace,RH %,16
+7704.R4140B.RT,140B Stone Exhibit,Temp F,16
+7704.R4140B.RH,140B Stone Exhibit,RH %,16
+7704.R4140C.RT,140C Trent Exhibit,Temp F,16
+7704.R4140C.RH,140C Trent Exhibit,RH %,16
+E61T11103A:ROOM TEMP,RLTS Smith Rm 103,Temp F,
+E61T11104A:ROOM TEMP,RLTS Smith Rm 104,Temp F,
+E61T11111A:ROOM TEMP,RLTS Smith Workroom,Temp F,
+E61T11117A:ROOM TEMP,RLTS Smith Rm 131,Temp F,
+E61Q13A,RLTS Smith,RH %,
+W04T1037D1A:ROOM TEMP,Bostock Lower Level,Temp F,
+W04T1227A1A:ROOM TEMP,Bostock 2d Floor,Temp F,
+W04T1332B1A:ROOM TEMP,Bostock 3d Floor,Temp F,
+W04T1422C1A:ROOM TEMP,Bostock 4th Floor,Temp F,
+W04T21012B2C:ROOM TEMP,Perkins 1st Floor zone 1,Temp F,1
+W04T2101A2C:ROOM TEMP,Perkins 1st Floor zone 4,Temp F,4
+W04T2101A3C:ROOM TEMP,Perkins 1st Floor zone 2,Temp F,2
+W04T2101C3C:ROOM TEMP,Perkins 1st Floor zone 3,Temp F,3
+W04T2225BL:ROOM TEMP,Perkins 2d Floor zone 3,Temp F,3
+W04T2233HL:ROOM TEMP,Perkins 2d Floor zone 2,Temp F,2
+W04T2238BL:ROOM TEMP,Perkins 2d Floor zone 4,Temp F,4
+W04T2310BL:ROOM TEMP,Perkins 3d Floor zone 1,Temp F,1
+W04T2310HL:ROOM TEMP,Perkins 3d Floor zone 3,Temp F,3
+W04T2311BL:ROOM TEMP,Perkins 3d Floor zone 2,Temp F,2
+W04T2315AL:ROOM TEMP,Perkins 3d Floor zone 4,Temp F,4
+W04T2409BL:ROOM TEMP,Perkins 4th Floor zone 3,Temp F,3
+W04T2409JL:ROOM TEMP,Perkins 4th Floor zone 2,Temp F,2
+W04T2415BL:ROOM TEMP,Perkins 4th Floor zone 4,Temp F,4
+W04T2420L:ROOM TEMP,Perkins 4th Floor zone 1,Temp F,1
+W04T2B14A1A:ROOM TEMP,Perkins Lower Level 2 zone 2,Temp F,2
+W04T2B14A2A:ROOM TEMP,Perkins Lower Level 2 zone 1,Temp F,1
+W04T2B14A6C:ROOM TEMP,Perkins Lower Level 2 zone 3,Temp F,3
+W04T2B14C3A:ROOM TEMP,Perkins Lower Level 2 zone 4,Temp F,4
+W04Q2310,Perkins 3d Floor zone 1,RH %,1
+W04Q2311,Perkins 3d Floor zone 2,RH %,2
+W04Q2315,Perkins 3d Floor zone 4,RH %,4
+W04Q2318,Perkins 3d Floor zone 3,RH %,3
+M70C01,LSC Module 1 Return,Temp F,
+M70QC01,LSC Module 1 Return,RH %,
+M70C02,LSC Module 2 Return,Temp F,
+M70QC02,LSC Module 2 Return,RH %,
+7970.AHU03.SPACE.RET.TEMP,LSC Module 3 Return,Temp F,
+7970.AHU03.SPACE.RET.HUM,LSC Module 3 Return,RH %,
+OATCHP,LSC Outdoor,Temp F,
+W96OAH,LSC Outdoor,RH %,
